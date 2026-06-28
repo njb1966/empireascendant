@@ -55,7 +55,7 @@ If a task depends on a conflict between sources, stop and identify the conflict 
 
 ## Current Phase
 
-D5B - ANSI presentation paused pending authored TheDraw mockup.
+D5C - scoring review, simulations, and balance tuning plan.
 
 ## Done
 
@@ -85,11 +85,11 @@ D5B - ANSI presentation paused pending authored TheDraw mockup.
 - D4E was reviewed and accepted after SSH connection, terminal input, and game session access were verified manually.
 - D5A terminal presentation, Story / Instructions, and basic menu readability are implemented with ASCII terminal helpers, no balance changes, no mechanics changes, and no deployment behavior.
 - D5A was reviewed and accepted.
-- D5B generated ANSI presentation exists in code, but user review rejected it as visually unacceptable. Do not continue iterating on generated ANSI art without an authored mockup.
+- D5B ANSI presentation is accepted after user review in SyncTerm and plain fallback review. ANSI mode is the primary player-facing UI, plain mode remains a readable fallback, and the standalone repository identity cleanup was completed.
 
 ## Next Task
 
-Wait for an authored TheDraw mockup for the primary 80x24 ANSI main menu screen, then plan a narrow D5B revision around that asset. ANSI is the primary player-facing presentation; plain ASCII remains the fallback. Balance tuning, deployment, live hub listing, full visitor gameplay, and destructive purge tooling remain deferred until separately planned and approved.
+Plan and execute D5C: leaderboard scoring review, representative empire simulations, money score coefficient review, production/combat/action-cost balance review, and final balance decision documentation. Deployment, live hub listing, full visitor gameplay, and destructive purge tooling remain deferred until separately planned and approved.
 
 ## Do Not
 

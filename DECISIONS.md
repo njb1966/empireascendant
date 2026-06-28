@@ -415,3 +415,13 @@ Reason: User review found the first native presenter too safe and dull compared 
 Rejected alternatives: Treating ANSI as a minor color overlay, keeping the oversized splash-style title, rendering raw `.ANS` files before the current command flow is stable, or changing mechanics during visual revision.
 
 Affected phases: D5B, later D5 polish.
+
+### 2026-06-28 - D5B Accepted
+
+Decision: D5B ANSI presentation, plain fallback, final menu feedback fixes, and standalone repository identity cleanup are accepted. The project may proceed to D5C scoring review, representative simulations, and balance tuning.
+
+Reason: User review confirmed the ANSI visuals and aesthetics look good, Bank flow works, Army Status color separation looks correct, and the plain fallback sanity checks passed. Automated verification passed with `go test ./...`, `make build`, `make smoke`, ANSI stdio, plain stdio, and SSH/SyncTerm review using `-ssh-encoding=auto`. Final cleanup moved live ANSI assets under `assets/ansi/`, removed old reference screenshots/sample ANSI screens, and replaced the historical Dominion README with an Empire Ascendant README using `screenshot.png`.
+
+Rejected alternatives: Continuing visual iteration before balance review, treating the old sample screenshots as repo-facing product material, or moving to deployment before completing D5 scoring and balance review.
+
+Affected phases: D5B, D5C.

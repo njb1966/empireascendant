@@ -384,7 +384,32 @@ Manual smoke path verified:
 
 D5B did not change mechanics, balance constants, database schema, federation behavior, SSH transport behavior, deployment behavior, full visitor gameplay, or purge tooling.
 
-Visual review note: these checks prove the current D5B implementation is technically runnable, but D5B is not accepted. User review rejected the generated ANSI design. Resume D5B from `D5B_VISUAL_HANDOFF.md` with an authored TheDraw mockup as the visual source of truth.
+## D5B Final Acceptance Verified On 2026-06-28
+
+Commands run successfully during final D5B review and cleanup:
+
+```bash
+go test ./...
+make build
+make smoke
+printf 'Q\n' | ./bin/interdoor-dominion -stdio=true -db /tmp/empireascendant-plain-smoke.db -ansi=false
+printf 'Q\n' | ./bin/interdoor-dominion -stdio=true -db /tmp/empireascendant-ansi-smoke.db -ansi=true
+./bin/interdoor-dominion -stdio=false -addr 127.0.0.1:2324 -db var/empireascendant.db -ssh-host-key var/ssh_host_rsa -ansi=true -ssh-encoding=auto
+```
+
+Manual review verified:
+
+- ANSI visuals and aesthetics look good in SyncTerm.
+- `-ssh-encoding=auto` renders correctly in both SyncTerm and a regular terminal SSH session.
+- Banking deposit/withdraw flow works and updates visible financial status.
+- Bank invalid commands stay in Bank and show an error.
+- Develop/worker/attack blocked actions show visible feedback.
+- Army Status uses readable color-separated sections.
+- Plain fallback sanity checks passed.
+- The standalone GitHub repository was created at `njb1966/empireascendant`.
+- Repository identity cleanup removed old reference screenshots/sample ANSI screens and replaced the historical README with an Empire Ascendant README using `screenshot.png`.
+
+D5B is accepted. The next D5 slice is D5C: leaderboard scoring review, representative empire simulations, money score coefficient review, production/combat/action-cost balance review, and final balance decision documentation.
 
 ## Legacy Username Migration Fix Verified On 2026-06-25
 

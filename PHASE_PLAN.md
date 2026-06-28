@@ -152,14 +152,14 @@ Goal: Improve presentation, instructions, lore, and balance without changing the
 
 Slices:
 
-1. Add ANSI title art or adapt existing ANSI assets.
-2. Add story/instructions screen.
-3. Improve menu copy and terminal presentation.
-4. Add leaderboard scoring review.
-5. Simulate representative empire states.
-6. Revisit money score coefficient.
-7. Balance production, combat ratios, and action costs.
-8. Document final balance decisions.
+1. Add ANSI title art or adapt existing ANSI assets. Accepted in D5B.
+2. Add story/instructions screen. Accepted in D5A and revised in D5B.
+3. Improve menu copy and terminal presentation. Accepted in D5A/D5B.
+4. Add leaderboard scoring review. Next D5C work.
+5. Simulate representative empire states. Next D5C work.
+6. Revisit money score coefficient. Next D5C work.
+7. Balance production, combat ratios, and action costs. Next D5C work.
+8. Document final balance decisions. Next D5C work.
 
 Acceptance:
 
