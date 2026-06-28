@@ -1,70 +1,70 @@
 # Session Handoff
 
-Date: 2026-06-25
+Date: 2026-06-28
 
 ## Current State
 
-- D1, D2, D3, D4A, D4B, D4C, D4D, and D4E are implemented, reviewed, and accepted.
-- D5A terminal presentation, Story / Instructions, and menu readability are implemented, reviewed, and accepted.
-- D5B generated ANSI presentation is technically implemented and verified, but user review rejected the look. D5B is not accepted.
-- User may create an authored TheDraw mockup to use as the D5B visual source of truth.
-- Legacy `var/empireascendant.db` username migration was fixed and verified after `username_key` index creation failed on an older schema.
-- D4E SSH listener was manually verified: SSH connects, terminal input works, and the game session is reachable.
-- The SSH review database caveat is documented: `/tmp/empireascendant-d4e-ssh.db` is throwaway and will not contain empires from `var/empireascendant.db`.
-- Active next task is waiting for the authored TheDraw mockup or an explicit user request for another design attempt.
+- Standalone repository: `njb1966/empireascendant`.
+- Current branch: `main`.
+- Latest pushed commit at handoff: `e61d15e` (`Implement D5C scoring balance review`).
+- D1, D2, D3, D4A, D4B, D4C, D4D, D4E, D5A, and D5B are implemented, reviewed, and accepted.
+- D5B ANSI presentation is accepted after SyncTerm review, plain fallback sanity checks, banking/feedback fixes, and repository identity cleanup.
+- D5C scoring/balance implementation is complete and pushed, but still needs user manual review before marking D5C accepted.
 
-## Next Prompt
+## D5C Implemented Scope
 
-```text
-Resume D5B visual implementation only. Work inside the Empire Ascendant folder. Read PROJECT.md, CURRENT_TASK.md, DECISIONS.md, TESTING.md, SESSION_HANDOFF.md, and D5B_VISUAL_HANDOFF.md. The previous generated ANSI design was rejected and D5B is not accepted. Use the user-provided TheDraw mockup as the source of truth for the ANSI main menu. Keep `-ansi=false` as plain fallback. Do not change mechanics, balance constants, deployment, live hub behavior, visitor gameplay, purge tooling, or InterDoor protocol behavior. Present a narrow file-level plan before coding unless the user explicitly approves implementation.
-```
+- Score weights are named constants in `internal/game/score.go`.
+- Leaderboard score now uses total wealth: `Money + MoneyBank`.
+- Money scoring now uses the D5-planned `0.1` coefficient through `ScoreMoneyDivisor = 10`.
+- Focused scoring tests cover:
+  - formula components
+  - free banking score invariance
+  - representative starting, builder/economic, and raider states
+- Focused balance tests cover:
+  - early mining path viability
+  - default combat threshold behavior
+- Production constants, combat strengths, and action costs were retained.
 
-## D5A Accepted Scope
-
-- ASCII terminal title, section, and menu helpers.
-- Story / Instructions from the main menu.
-- Consistent formatting for main menu, Empire HQ, Develop, Attack, Rankings, News, Wanderers, and Dispatches.
-- No mechanics, balance, deployment, federation, visitor gameplay, or purge tooling changes.
-
-## D5B Implemented Scope
-
-- `-ansi` CLI flag.
-- ANSI primary mode and plain fallback.
-- Compact native Empire Ascendant header.
-- Black-background framed menu panels with bright command keys.
-- Presentation-only work; no mechanics or balance changes.
-
-## D5B User Review Result
-
-- Generated ANSI design was rejected as visually unacceptable.
-- Do not continue generated ANSI art iteration by default.
-- Next preferred direction is an authored TheDraw `.ANS` mockup used as the primary ANSI visual target.
-- Raw folder-local `.ANS` rendering is allowed to be considered for D5B if it best preserves the authored screen.
-
-## Hard Guardrails
-
-- Work only inside this folder and subfolders.
-- Do not use Ledger of the Low as a design or implementation guide.
-- Do not inspect outside-folder files unless confirming a current InterDoor protocol/interface fact, and state why first.
-- Do not mark D5B accepted until the authored/mockup-based terminal output is reviewed and approved.
-- Do not change balance, mechanics, deployment, public hub behavior, full visitor gameplay, or purge tooling during D5B review.
-
-## Verification Already Good
+## Verified Commands
 
 Last known good verification:
 
 ```bash
+go test ./internal/game
 go test ./...
-make build
 make smoke
-printf 'S\nQ\n' | ./bin/interdoor-dominion -db /tmp/empireascendant-d5b-revised-help.db -stdio -ansi=false
-timeout 2s ./bin/interdoor-dominion -stdio=false -addr 127.0.0.1:0 -db var/empireascendant.db
-printf 'Q\n' | ./bin/interdoor-dominion -db /tmp/empireascendant-d5b-revised-ansi.db -stdio -ansi=true
 ```
 
-Manual SSH review command:
+## Manual Review Needed Next
 
-```bash
-./bin/interdoor-dominion -stdio=false -addr 127.0.0.1:2324 -db var/empireascendant.db -ansi=true
-ssh -p 2324 review@127.0.0.1
+Before marking D5C accepted, review enough gameplay to confirm the leaderboard and balance feel sane:
+
+1. Create or reuse a few empires.
+2. Compare rankings before and after banking money.
+3. Confirm depositing money no longer lowers rank.
+4. Confirm wealthy/economic empires feel competitive with military-heavy empires.
+5. Confirm early development still feels reasonable:
+   - activate region
+   - build toward Miners Guild
+   - hire/assign miner
+   - sell minerals
+6. Confirm combat still feels risky and not obviously profitable against a fresh/default empire.
+
+## Next Prompt
+
+```text
+Resume Empire Ascendant D5C manual review. Work only inside /media/nick/1TB_Storage1/projects/retro/gaming/interdoor/games/empireascendant. Read PROJECT.md, CURRENT_TASK.md, DECISIONS.md, TESTING.md, SESSION_HANDOFF.md, REWRITE_PLAN.md, PHASE_PLAN.md, and SOURCE_NOTES.md. D5B is accepted. D5C scoring/balance implementation is pushed at e61d15e but not yet user-accepted. Help review leaderboard scoring, banking score invariance, representative builder/raider balance, early mining viability, and default combat risk. Do not change deployment, live hub behavior, visitor gameplay, purge tooling, or InterDoor protocol behavior unless separately approved. Ask before making additional balance changes unless a clear bug is found.
 ```
+
+## Guardrails
+
+- Work only inside this folder and subfolders unless the user explicitly approves a separate task.
+- Do not inspect outside-folder files unless confirming a current InterDoor protocol/interface fact, and state why first.
+- Do not mark D5C accepted until the user reviews the scoring/balance behavior.
+- Do not start deployment, firewall/systemd changes, public registration, live hub token use, full visitor gameplay, or destructive purge tooling during D5C review.
+- Any further balance change must be backed by tests, simulation output, or documented reasoning.
+
+## Likely Paths After Review
+
+- If manual D5C review passes: mark D5C accepted in `PROJECT.md`, `CURRENT_TASK.md`, `DECISIONS.md`, and `TESTING.md`.
+- Then choose between deployment planning or the next gameplay slice.

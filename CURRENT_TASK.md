@@ -8,7 +8,7 @@ D5C - scoring review, simulations, and balance tuning.
 
 ## Current Goal
 
-Review scoring and balance with representative states before changing constants. Any balance change must be explicit, documented, and backed by tests, simulations, or written reasoning.
+Manually review the implemented D5C scoring and balance changes before marking D5C accepted. Any further balance change must be explicit, documented, and backed by tests, simulations, or written reasoning.
 
 ## Task Statement
 
@@ -72,6 +72,7 @@ Outside-folder files may be read only for current InterDoor protocol/interface r
 - Production, combat ratios, and action costs are reviewed together so changes do not create obvious dead ends.
 - Any changed constants are centralized and covered by focused tests or documented simulation output.
 - Final balance decisions are recorded in `DECISIONS.md` and `TESTING.md`.
+- User manually confirms rankings/banking/economic-vs-military balance feels acceptable.
 - No deployment, public hub, visitor gameplay, destructive purge, or InterDoor protocol behavior changes are introduced.
 
 ## D5B Final Verification
@@ -88,7 +89,7 @@ printf 'Q\n' | ./bin/interdoor-dominion -db /tmp/empireascendant-d5b-revised-ans
 ## Resume Prompt
 
 ```text
-Resume D5C scoring and balance work only. Work inside the Empire Ascendant folder. Read PROJECT.md, CURRENT_TASK.md, DECISIONS.md, TESTING.md, REWRITE_PLAN.md, PHASE_PLAN.md, SOURCE_NOTES.md, and the relevant internal/game files. D5B visuals are accepted. Review leaderboard scoring, representative empire simulations, money score coefficient, production/combat ratios, and action costs. Do not change deployment, live hub behavior, visitor gameplay, purge tooling, or InterDoor protocol behavior. Present a narrow file-level plan before coding unless the user explicitly approves implementation.
+Resume D5C manual review only. Work inside the Empire Ascendant folder. Read PROJECT.md, CURRENT_TASK.md, DECISIONS.md, TESTING.md, SESSION_HANDOFF.md, REWRITE_PLAN.md, PHASE_PLAN.md, SOURCE_NOTES.md, and the relevant internal/game files. D5B visuals are accepted. D5C scoring/balance implementation is pushed but not yet user-accepted. Review leaderboard scoring, banking score invariance, representative builder/raider balance, early mining viability, and default combat risk. Do not change deployment, live hub behavior, visitor gameplay, purge tooling, or InterDoor protocol behavior. Ask before making additional balance changes unless a clear bug is found.
 ```
 
 ## Stop Conditions
