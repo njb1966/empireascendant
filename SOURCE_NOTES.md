@@ -8,8 +8,8 @@ This file captures project facts discovered from the original Dominion files. Us
 - `SETUP.PAS`: setup/config parsing source.
 - `A.PAS`: assignment list for config values.
 - `CONFIG.DOM`: original runtime configuration file.
-- `MENU*.ANS` and `SCREENS/*.ANS`: ANSI art/menu assets.
-- `README.md`: historical background from the original author.
+- `assets/ansi/`: Empire Ascendant runtime ANSI assets.
+- `README.md`: current Empire Ascendant usage and verification notes.
 
 ## Critical Fact
 

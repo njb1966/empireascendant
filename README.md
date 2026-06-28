@@ -1,80 +1,99 @@
-# DOMINION
+# Empire Ascendant
 
-![Floppy disk](screenshots/dominion-disk.jpg)
+![Empire Ascendant terminal screenshot](screenshot.png)
 
-It's a door game I was hacking on when I was in highschool in 1996 (Grade 11).
+Empire Ascendant is a retro BBS door strategy game written in Go. It is built for terminal play, with ANSI presentation for SyncTerm and other BBS-style clients, plus a plain text fallback for simple terminals and automated checks.
 
-Never finished it... but hey. Here it is, in all of its Turbo Pascal glory.
+Players create an empire, develop regions, build industry, manage workers and mines, bank money, raise armies, and interact with other empires through local play and InterDoor federation features.
 
-## A bit of history
+## Current Features
 
-The best I can remember it anyways. 
+- Stdio play mode for local testing and review.
+- SSH listener mode for SyncTerm or a regular SSH client.
+- ANSI UI enabled by default, with `-ansi=false` for plain fallback.
+- SQLite persistence.
+- Empire creation and daily turn reset.
+- Development economy: regions, buildings, research, mines, workers, mineral sales, and banking.
+- Military systems: recruitment, defenses, military research, missiles, local attacks, and spy missions.
+- InterDoor foundation: node registration, heartbeat, event sync, remote roster, rankings, news, cross-node PvP, and Hyperdrive travel foundation.
+- Inactive empire lifecycle tracking.
 
-I wrote much of this game for my Grade 11 computer science class. Though I don't actually remember learning
-a lot of actual comp. sci. 
+## Build
 
-At the time a couple of us ran a small BBS system from some old hardware we scrapped 
-together around the highschool. I remember begging our principal for a 14.4kbps model so we can serve our users
-better. The 9600bps we had was quite slow even by 1996 standards. She managed to help us out with hundred
-dollars out of our tiny school budget for a 28.8kbps model. 
+```sh
+make build
+```
 
-It's taken me almost two decades to appreciate that. Damn. 
+The binary is written to:
 
-Anyways, we ran this little BBS called the Infinity BBS. It was one of three BBS systems
-that we had in Prince Rupert. The other were ran by two friends of mine. One, 
-the Junkyard BBS would be my first experience with email. Of course, not knowing
-anybody outside of Prince Rupert, I didn't have anybody to email. 
+```sh
+bin/interdoor-dominion
+```
 
-To be as popular as the Junkyard BBS was our highschool dreams. I mean, Keith had TWO 
-phone lines, multiple CD ROMS of content and email (well sort of). Our little BBS
-ran out of a back room of the school's computer lab. 
+The binary name is historical for now; the game identity is Empire Ascendant.
 
-Actually, it started out in the lab itself. As word got out about our little BBS
-the random modem [ping, boop, wrrrs](https://www.youtube.com/watch?v=vvr9AMWEU-c) throughout the day 
-would interrupt the class. That gave us the purest form of geek joy that I can remember. 
+## Local Play
 
-About that time is when I started writing Dominion. It was to be like Legend of the
-Red Dragon, Usurper and Trade Wars 2000 which were so popular at the time. I never
-quite finished it however, spending way too much time on getting the cursor to 
-blink green and print like a slow retro-futuristic terminal. 
+Plain terminal mode:
 
-Regardless, here it is. Finding code from your childhood is as nostalgic as 
-finding old vacation photos. Enjoy. 
+```sh
+./bin/interdoor-dominion -stdio=true -db var/empireascendant.db -ansi=false
+```
 
-## The `.ANS` files
+ANSI terminal mode:
 
-These require the awesome [TheDraw](http://en.wikipedia.org/wiki/TheDraw) program to open and 
-edit these files. Unfortunatly it's DOS based but works great in [DosBox](http://www.dosbox.com/). 
+```sh
+./bin/interdoor-dominion -stdio=true -db var/empireascendant.db -ansi=true
+```
 
-Here's what they look like. _Warning awesome programmer ANSI art ahead!_
+## SSH / SyncTerm
 
-### MENU0.ans
-![MENU0.ANS](screenshots/menu0.png)
+Start a local SSH listener:
 
-### MENU1.ans
-![MENU1.ANS](screenshots/menu1.png)
+```sh
+./bin/interdoor-dominion \
+  -stdio=false \
+  -addr 127.0.0.1:2324 \
+  -db var/empireascendant.db \
+  -ssh-host-key var/ssh_host_ed25519 \
+  -ansi=true \
+  -ssh-encoding=auto
+```
 
-### MENU2.ans
-![MENU2.ANS](screenshots/menu2.png)
+Then connect with SyncTerm using:
 
-### MENU3.ans
-![MENU3.ANS](screenshots/menu3.png)
+- Connection type: `SSH`
+- Address: `127.0.0.1`
+- TCP port: `2324`
+- Terminal/font: CP437-compatible settings
 
-### MENU4.ans
-![MENU4.ANS](screenshots/menu4.png)
+Regular terminal SSH clients also work with `-ssh-encoding=auto`.
 
-### MENU5.ans
-![MENU5.ANS](screenshots/menu5.png)
+## InterDoor Node Commands
 
-### MENU6.ans
-![MENU6.ANS](screenshots/menu6.png)
+The game can participate as an InterDoor node when configured with a node ID, hub URL, API key, and advertised address.
 
-### MENU7.ans
-![MENU7.ANS](screenshots/menu7.png)
+Useful flags:
 
-### MENU8.ans
-![MENU8.ANS](screenshots/menu8.png)
+```sh
+-node-id ascendant
+-hub-url https://example-hub.invalid
+-api-key secret
+-advertise-addr host.example:2324
+-register
+-heartbeat
+-sync-once
+```
 
-## License
+These commands share the same SQLite database used by the game session.
 
-See LICENSE.txt
+## Verification
+
+```sh
+go test ./...
+make smoke
+```
+
+## Runtime Files
+
+Generated binaries, databases, SSH host keys, and logs are intentionally ignored by Git. Runtime state belongs under `var/` unless a deployment chooses another path.

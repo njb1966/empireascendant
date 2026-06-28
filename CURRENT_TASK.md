@@ -28,7 +28,7 @@ Do not add public deployment, firewall/systemd changes, live hub listing, live r
 - `TESTING.md`
 - `CONFIG.DOM` for startup defaults
 - `DOMINION.PAS` only if source-model fields or original region/building/mine concepts need confirmation
-- `SCREENS/*.ANS`, `MENU*.ANS`, and `screenshots/*.png` for local visual reference
+- `assets/ansi/*.ans` for local runtime ANSI assets
 
 Outside-folder files may be read only for current InterDoor protocol/interface requirements, and only after stating why they are needed. D5B review should not require outside-folder inspection.
 
@@ -37,7 +37,7 @@ Outside-folder files may be read only for current InterDoor protocol/interface r
 - `-ansi` CLI flag controls ANSI color presentation.
 - ANSI is enabled by default for CLI sessions and can be disabled with `-ansi=false`.
 - `internal/session/presentation.go` now has an ANSI/plain presenter.
-- ANSI mode uses native Empire Ascendant screens informed by local Dominion screenshots: compact header, framed panels, bright command keys, black background, and command strip styling.
+- ANSI mode uses native Empire Ascendant screens: compact header, framed panels, bright command keys, black background, and command strip styling.
 - Menus use BBS-style boxed two-column panels.
 - Plain fallback remains readable and contains no ANSI escapes.
 - D5B keeps command keys, mechanics, balance constants, database schema, federation behavior, deployment behavior, visitor gameplay, and purge tooling unchanged.

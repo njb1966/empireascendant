@@ -1,7 +1,6 @@
 package session
 
 import (
-	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -500,99 +499,8 @@ func (p *presenter) ansiPrompt(out io.Writer, label string) {
 	fmt.Fprintf(out, "%s%s│ %s>%s ", ansiBlackBG, ansiWhite+ansiBright, ansiYellow+ansiBright, ansiReset)
 }
 
-func mainMenuPatches() []ansiPatch {
-	return []ansiPatch{
-		{old: "Empire Status", new: "Empire Control"},
-		{old: "General Information", new: "Enter Your Empire"},
-		{old: "Financial Information", new: "Rankings -- Top Empires"},
-		{old: "Army Status Information", new: ""},
-		{old: "Ballistic Weapons Information", new: "Story / Help"},
-		{old: "Global Defence Information", new: ""},
-		{old: "Region Information", new: ""},
-		{old: "Mine Information", new: "Galactic News"},
-		{old: "Empire Energy Information", new: "Quit"},
-	}
-}
-
-func mainMenuKeyMap() []ansiKeyPatch {
-	return []ansiKeyPatch{
-		{old: "1", new: "E"},
-		{old: "2", new: "R"},
-		{old: "3", new: " "},
-		{old: "4", new: "S"},
-		{old: "5", new: " "},
-		{old: "6", new: " "},
-		{old: "7", new: " "},
-		{old: "8", new: "Q"},
-		{old: "9", new: "N"},
-	}
-}
-
-func hqMenuPatches() []ansiPatch {
-	return []ansiPatch{
-		{old: "Empire Status", new: "Global Head Quarters"},
-		{old: "General Information", new: "Your Empire Report"},
-		{old: "Financial Information", new: "Develop Empire"},
-		{old: "Army Status Information", new: "Bank"},
-		{old: "Ballistic Weapons Information", new: "Attack Menu"},
-		{old: "Global Defence Information", new: "Intel Report"},
-		{old: "Region Information", new: "Galactic Dispatches"},
-		{old: "Mine Information", new: "Wanderers"},
-		{old: "Empire Energy Information", new: "Hyperdrive / Q=Quit"},
-	}
-}
-
-func hqMenuKeyMap() []ansiKeyPatch {
-	return []ansiKeyPatch{
-		{old: "1", new: "T"},
-		{old: "2", new: "D"},
-		{old: "3", new: "B"},
-		{old: "4", new: "A"},
-		{old: "5", new: "I"},
-		{old: "6", new: "M"},
-		{old: "7", new: "W"},
-		{old: "8", new: "H"},
-	}
-}
-
-func ansiAsset(name string, patches []ansiPatch, keyPatches []ansiKeyPatch, promptOptions string) (string, bool) {
-	data, err := readANSAsset("MENU0.ANS")
-	if name != "MENU0.ANS" {
-		data, err = readANSAsset(name)
-	}
-	if err != nil {
-		return "", false
-	}
-	for _, patch := range patches {
-		data = replaceANSLabel(data, patch.old, patch.new)
-	}
-	for _, patch := range keyPatches {
-		dot := "."
-		if patch.new == " " {
-			dot = " "
-		}
-		data = bytes.ReplaceAll(data, []byte("\x1b[35m"+patch.old+"\x1b[36m."), []byte("\x1b[35m"+patch.new+"\x1b[36m"+dot))
-		data = bytes.ReplaceAll(data, []byte("\x1b[1;35m"+patch.old+"\x1b[36m."), []byte("\x1b[1;35m"+patch.new+"\x1b[36m"+dot))
-	}
-	if promptOptions != "" {
-		data = replacePromptOptions(data, promptOptions)
-	}
-	return cp437ANSIToUTF8(data), true
-}
-
-func ansiBankAsset() (string, bool) {
-	data, err := readANSAsset("MENU5.ANS")
-	if err != nil {
-		return "", false
-	}
-	data = bytes.Replace(data, []byte("\x1b[37m3\x1b[0m."), []byte("\x1b[37mQ\x1b[0m."), 1)
-	data = bytes.Replace(data, []byte("\x1b[1;36mI\x1b[34mnvestments"), []byte("\x1b[1;36mR\x1b[34meturn     "), 1)
-	data = replacePromptOptions(data, "<1,2,Q,?>")
-	return cp437ANSIToUTF8(data), true
-}
-
 func ansiHeaderAsset() (string, bool) {
-	data, err := readANSAsset("HEADER1.ANS")
+	data, err := readANSAsset("header.ans")
 	if err != nil {
 		return "", false
 	}
@@ -978,7 +886,7 @@ func ansiNoticeBox(out io.Writer, notice string) {
 }
 
 func ansiMenu8Asset(title string, patches []ansiMenuPatch, promptOptions string) (string, bool) {
-	data, err := readANSAsset("MENU8.ANS")
+	data, err := readANSAsset("menu_frame.ans")
 	if err != nil {
 		return "", false
 	}
@@ -1249,10 +1157,8 @@ func lastVisibleCell(cells []ansiCell) int {
 
 func readANSAsset(name string) ([]byte, error) {
 	paths := []string{
-		"SCREENS/" + name,
-		name,
-		"../../SCREENS/" + name,
-		"../../" + name,
+		"assets/ansi/" + name,
+		"../../assets/ansi/" + name,
 	}
 	var last error
 	for _, path := range paths {
@@ -1263,61 +1169,6 @@ func readANSAsset(name string) ([]byte, error) {
 		last = err
 	}
 	return nil, last
-}
-
-type ansiPatch struct {
-	old string
-	new string
-}
-
-type ansiKeyPatch struct {
-	old string
-	new string
-}
-
-func replaceANSLabel(data []byte, old, new string) []byte {
-	if len(new) > len(old) {
-		new = new[:len(old)]
-	}
-	return bytes.ReplaceAll(data, []byte(old), []byte(new+strings.Repeat(" ", len(old)-len(new))))
-}
-
-func replacePromptOptions(data []byte, promptOptions string) []byte {
-	label := []byte("Your Command ")
-	start := bytes.Index(data, label)
-	if start < 0 {
-		return data
-	}
-	optionsStart := start + len(label)
-	lineEnd := bytes.IndexByte(data[optionsStart:], '\r')
-	if lineEnd < 0 {
-		return data
-	}
-	lineEnd += optionsStart
-	options := coloredPromptOptions(promptOptions)
-	if len(options) < lineEnd-optionsStart {
-		options = append(options, bytes.Repeat([]byte(" "), lineEnd-optionsStart-len(options))...)
-	}
-	replaced := make([]byte, 0, len(data))
-	replaced = append(replaced, data[:optionsStart]...)
-	replaced = append(replaced, options...)
-	replaced = append(replaced, data[lineEnd:]...)
-	return replaced
-}
-
-func coloredPromptOptions(promptOptions string) []byte {
-	var out []byte
-	for _, r := range promptOptions {
-		switch {
-		case r == '?':
-			out = append(out, []byte("\x1b[33m?\x1b[30m")...)
-		case r >= 'A' && r <= 'Z':
-			out = append(out, []byte("\x1b[37m"+string(r)+"\x1b[30m")...)
-		default:
-			out = append(out, byte(r))
-		}
-	}
-	return out
 }
 
 func cp437ANSIToUTF8(data []byte) string {

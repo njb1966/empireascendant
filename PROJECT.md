@@ -10,7 +10,7 @@ Empire Ascendant is a Go rewrite of the unfinished Turbo Pascal BBS door game Do
 
 Empire Ascendant is intended to speak InterDoor where needed, but it is not a clone of any sample InterDoor game. Other InterDoor projects may be read only to confirm current protocol or interface requirements. They are not design authorities for Empire Ascendant.
 
-This is a design-informed rewrite, not a line-by-line port. The original Pascal source contains the data model, configuration format, player creation, menus, ANSI assets, and authorial intent, but the core gameplay procedure `Play_Game` is empty.
+This is a design-informed rewrite, not a line-by-line port. The original Pascal source contains the data model, configuration format, player creation, menus, and authorial intent, but the core gameplay procedure `Play_Game` is empty.
 
 ## Folder Boundary
 
@@ -47,7 +47,7 @@ When sources disagree, use this order:
 7. `DOMINION.PAS` and `SETUP.PAS` for original data model, config parsing, player creation, menus, and historical intent.
 8. `SOURCE_NOTES.md` for source archaeology summaries.
 9. `INTERDOOR_DESIGN_GUIDE.md` for broad InterDoor context only.
-10. `README.md` for historical background only.
+10. `README.md` for current standalone game usage.
 
 Outside-folder files never outrank the local project files above.
 
@@ -61,8 +61,8 @@ D5B - ANSI presentation paused pending authored TheDraw mockup.
 
 - Original Pascal source is present: `DOMINION.PAS`, `SETUP.PAS`, `A.PAS`.
 - Original config is present: `CONFIG.DOM`.
-- ANSI menu assets are present in the root and `SCREENS/`.
-- Historical project background is in `README.md`.
+- Empire Ascendant ANSI runtime assets are present in `assets/ansi/`.
+- Current game usage is documented in `README.md`.
 - InterDoor context is in `INTERDOOR_DESIGN_GUIDE.md`.
 - Rewrite intent is in `REWRITE_PLAN.md`.
 - Project control and LLM workflow docs are present.
