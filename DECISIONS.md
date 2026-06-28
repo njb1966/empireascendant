@@ -425,3 +425,13 @@ Reason: User review confirmed the ANSI visuals and aesthetics look good, Bank fl
 Rejected alternatives: Continuing visual iteration before balance review, treating the old sample screenshots as repo-facing product material, or moving to deployment before completing D5 scoring and balance review.
 
 Affected phases: D5B, D5C.
+
+### 2026-06-28 - D5C Scoring And Balance Review For Implementation
+
+Decision: D5C raises leaderboard money scoring from `money * 0.01` to total wealth scored at `0.1`, and scores `money + money_bank` instead of cash alone. Production, combat strengths, and action costs are retained for this pass and covered by representative balance tests.
+
+Reason: `REWRITE_PLAN.md` explicitly identified the original `money * 0.01` coefficient as too weak and tentatively recommended `money * 0.1`. Testing also exposed a scoring artifact: because banking is free, scoring only cash-on-hand penalized players for using the Bank. The updated formula keeps the existing population, military, and tech weights, makes score weights named constants, and makes stored wealth leaderboard-relevant without changing economy, combat, persistence, InterDoor, or deployment behavior. Representative tests document a starting score of `23000`, an economic builder score of `83000`, and a raider score of `44500`; they also verify early mining viability and that default combat defenses require committed, net-costly recruitment to overcome.
+
+Rejected alternatives: Keeping the old money coefficient despite the documented D5 risk, scoring only cash and leaving Bank as a leaderboard penalty, or changing production/combat/action costs without stronger evidence.
+
+Affected phases: D5C.

@@ -431,3 +431,26 @@ Verified fix:
 - SQLite store uses a single open connection to avoid DDL lock contention
 - username backfill closes its scan before applying updates
 - existing `var/empireascendant.db` initializes and reaches listener startup
+
+## D5C Scoring And Balance Review Verified On 2026-06-28
+
+Commands run successfully:
+
+```bash
+go test ./internal/game
+go test ./...
+make smoke
+```
+
+Automated tests verified:
+
+- score formula includes population, military attack power, total wealth, and unlocked tech
+- free banking does not change score
+- money score coefficient is effectively `0.1` through `ScoreMoneyDivisor = 10`
+- representative starting empire score is `23000`
+- representative economic builder score is `83000`
+- representative raider score is `44500`
+- early mining path is viable: activate Agricultural, accrue three production ticks, build Miners Guild, hire/assign a miner, mine and sell first gold output
+- default combat balance holds: modest recruitment loses against default defenses; committed recruitment can win but remains net-costly against a default treasury
+
+D5C changed leaderboard scoring only. It did not change production constants, combat strengths, action costs, database schema, federation behavior, SSH transport behavior, deployment behavior, full visitor gameplay, or purge tooling.

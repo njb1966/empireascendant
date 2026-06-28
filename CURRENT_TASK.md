@@ -48,6 +48,15 @@ Outside-folder files may be read only for current InterDoor protocol/interface r
 - The repository now has an Empire Ascendant README using `screenshot.png`, with old reference screenshots and unused sample ANSI files removed.
 - D5B keeps command keys, mechanics, balance constants, database schema, federation behavior, deployment behavior, visitor gameplay, and purge tooling unchanged.
 
+## D5C Implemented For Review
+
+- Score weights are named constants.
+- Leaderboard score now uses total wealth: `Money + MoneyBank`.
+- Money scoring now uses the D5-planned `0.1` coefficient through `ScoreMoneyDivisor = 10`.
+- Focused representative tests cover starting, builder/economic, and raider states.
+- Balance tests cover early mining viability and default combat thresholds.
+- Production constants, combat strengths, and action costs are retained pending user review.
+
 ## User Review Result
 
 - ANSI visuals and aesthetics are accepted.
